@@ -64,7 +64,6 @@ class ClientesController extends Controller
             $cliente["es_cliente"] = true;
             $cliente["es_proveedor"] = false;
 
-            return $this->success("data",200, $cliente);
             $clientes = Entidades::create($cliente);
             if($clientes){
                 return $this->success("Cliente creado",200,$cliente);
