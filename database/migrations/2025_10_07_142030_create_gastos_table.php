@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_usuario')->constrained('users')->cascadeOnDelete();
             $table->text('descripcion')->nullable();
             $table->decimal('monto',10,2)->nullable();
+            $table->foreignId('entidad')->constrained('entidades')->cascadeOnDelete();
             $table->timestamps();
         });
     }

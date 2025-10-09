@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Api\ClientesController;
 use App\Http\Controllers\Api\VentasController;
 use App\Http\Controllers\auth\AuthenticationController;
 use App\Http\Controllers\auth\RolPermissionController;
@@ -35,5 +36,10 @@ Route::middleware('auth:api')->prefix('rol-permisos')->group(function () {
 Route::middleware('auth:api')->prefix('admin')->group(function () {
     Route::prefix('ventas')->group(function () {
         Route::get('/',[VentasController::class,'index'])->middleware('rolePermission:Super Admin,Admin');
+    });
+
+    Route::prefix('clientes')->group(function () {
+        Route::get('/',[ClientesController::class,'index'])->middleware('rolePermission:Super Admin,Admin');
+        Route::post('/create',[ClientesController::class,'createCliente'])->middleware('rolePermission:Super Admin,Admin');
     });
 });

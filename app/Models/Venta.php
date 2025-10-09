@@ -24,4 +24,7 @@ class Venta extends Model
     public function archivos(){
         return $this->hasMany(Archivo::class,"id_referencia","id");
     }
+    public function entidades(){
+        return $this->hasMany(Entidades::class,"id_entidad","id");
+    }
 }

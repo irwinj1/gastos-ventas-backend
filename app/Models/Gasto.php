@@ -17,5 +17,8 @@ class Gasto extends Model
     public function archivos(){
         return $this->hasMany(Archivo::class,"id_referencia","id");
     } 
+    public function entidad(){
+        return $this->belongsTo(Entidades::class,"id_entidad","id");
+    }
 
 }
