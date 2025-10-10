@@ -13,6 +13,7 @@ class Entidades extends Model
         'nombre_comercial',
         'dui',
         'nit',
+        'n_registro',
         'email',
         'telefono',
         'direccion',

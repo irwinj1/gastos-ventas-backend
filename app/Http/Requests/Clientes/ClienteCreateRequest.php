@@ -29,6 +29,7 @@ class ClienteCreateRequest extends FormRequest
             "email"=> "required|email",
             "dui"=> "nullable|max:10",
             "nit"=> "nullable|max:20",
+            "registro"=>"required|max:20",
             "telefono"=> "required|max:9",
             "direccion"=> "required|max:2000",
             
@@ -45,6 +46,8 @@ class ClienteCreateRequest extends FormRequest
             "nombreComercial.unique"=> "El nombre comercial debe de ser unico",
             "dui.max"=> "Dui debe de tener maximo 10 caracteres",
             "nit.max"=>"NIT debe de tener macimo de 20 caractares",
+            "registro.required"=> "El numero de registro es obligatorio",
+            "registro.max"=> "El numero de registro no debe poseer mas de 20 caracteres",
             "telefono.required"=>"El telefono el obligatorio",
             "telefono.max"=> "El Telefono no debe tener mas de 9 caracteres",
             "direccion.required"=>"La direccion es obligatoria",
