@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('nit')->nullable();
             $table->string('telefono')->nullable();
             $table->string('direccion')->nullable();
+            $table->string('n_registro')->nullable();
 
             // Roles
             $table->boolean('es_cliente')->default(false);
