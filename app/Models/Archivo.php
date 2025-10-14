@@ -23,4 +23,7 @@ class Archivo extends Model
     public function gastos(){
         return $this->hasMany(Gasto::class,"id_referencia","id");
     }
+    public function tipoArchivos(){
+        return $this->hasMany(TipoArchivo::class,"id_tipo_archivo","id");
+    }
 }

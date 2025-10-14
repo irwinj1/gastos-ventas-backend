@@ -14,7 +14,7 @@ class ClientesController extends Controller
     /**
 
      *
-     * @operationId Obtener clientes
+     * @operationId Listados clientes
      */
     public function index(Request $request)
     {
@@ -22,6 +22,12 @@ class ClientesController extends Controller
             $clientes = Entidades::where('es_cliente',true);
             if($request->filled("nombreComercial")) {
                 $clientes = $clientes->where("nombre_comercial","ilike", $request->nombre_comercial);
+            }
+            if($request->filled("esCliente")) {
+                $clientes = $clientes->where("es_cliente",$request->esCliente);
+            }
+            if($request->filled("esProveedor")) {
+                $clientes = $clientes->where("es_proveddor",$request->esProveddor);
             }
             $clientesData = $clientes->paginate(10);
             $pagination = [
@@ -106,7 +112,7 @@ class ClientesController extends Controller
     /**
 
      *
-     * @operationId Obtener cliente
+     * @operationId cliente
      */
     public function getClienteId(Request $request, $id = null)
     {

@@ -36,6 +36,7 @@ Route::middleware('auth:api')->prefix('rol-permisos')->group(function () {
 Route::middleware('auth:api')->prefix('admin')->group(function () {
     Route::prefix('ventas')->group(function () {
         Route::get('/',[VentasController::class,'index'])->middleware('rolePermission:Super Admin,Admin');
+        Route::post('/create',[VentasController::class,'createVentas'])->middleware('rolePermission:Super Admin,Admin');
     });
 
     Route::prefix('clientes')->group(function () {

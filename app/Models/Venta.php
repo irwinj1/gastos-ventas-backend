@@ -9,22 +9,17 @@ class Venta extends Model
     //
     protected $table = "ventas";
     protected $fillable = [
-        "id_user","id_cliente","total"
+        "id_user","id_entidad","total"
         ];
 
 
-    public function clientes(){
-        return $this->belongsTo(Cliente::class,"id_cliente","id");
-    }
 
     public function detalle_ventas(){
         return $this->hasMany( DetalleVenta::class,"id_venta","id");
     }
 
-    public function archivos(){
-        return $this->hasMany(Archivo::class,"id_referencia","id");
-    }
+   
     public function entidades(){
-        return $this->hasMany(Entidades::class,"id_entidad","id");
+        return $this->belongsTo(Entidades::class,"id_entidad","id");
     }
 }
