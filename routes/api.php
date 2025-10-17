@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login']);
     Route::post('/logout',[AuthenticationController::class,'logout'])->middleware('rolePermission:Super Admin,Admin');
-    Route::post('/refresh',[AuthenticationController::class,'refresh'])->middleware('rolePermission:Super Admin,Admin');
+    Route::post('/refresh',[AuthenticationController::class,'refresh']);
     Route::post('/validate-token',[AuthenticationController::class,'validatedToken']);
 });
 
@@ -37,6 +37,7 @@ Route::middleware('auth:api')->prefix('admin')->group(function () {
     Route::prefix('ventas')->group(function () {
         Route::get('/',[VentasController::class,'index'])->middleware('rolePermission:Super Admin,Admin');
         Route::post('/create',[VentasController::class,'createVentas'])->middleware('rolePermission:Super Admin,Admin');
+        Route::delete('/delete/{id}',[VentasController::class,'destroy'])->middleware('rolePermission:Super Admin,Admin');
     });
 
     Route::prefix('clientes')->group(function () {

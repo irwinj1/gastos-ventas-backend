@@ -135,6 +135,27 @@ class VentasController extends Controller
         }
     }
 
+    /**
 
+     *
+     * @operationId Eliminar venta
+     */
+
+    public function destroy($id){
+        DB::beginTransaction();
+        try {
+
+            $ventas = Venta::find($id);
+            $ventas->delete();
+
+            $detalleVentas = DetalleVenta::where('id_venta', $ventas->id);
+            foreach ($detalleVentas as $detalleVenta) {
+                $detalleVenta->delete();
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 
 }
