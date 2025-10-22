@@ -30,21 +30,19 @@ class AuthenticationController extends Controller
                 'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
            
             ];
-
+            
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email|exists:users,email',
                 'password' => 'required|min:8',
             ], $messages);
-  
+ 
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors()->first(),
                 ], 422);
             }
-
             $credentials = $request->only('email', 'password');
-           
             if (!$token = auth('api')->attempt($credentials)) {
                 return response()->json([
                     'status' => false,
@@ -92,27 +90,31 @@ class AuthenticationController extends Controller
      */
     public function refresh(){
         try {
-            if (!$token = auth('api')->refresh()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'No se pudo refrescar el token'
-                ], 401);
-            }
+ $token = auth('api')->refresh();
 
-            $user = auth('api')->user();
-            $usuario = [
-                'status' => true,
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => auth('api')->factory()->getTTL() * 60,
-                'user' => $user,
-                'roles' => $user->getRoleNames(),
-                'permissions' => $user->getAllPermissions()->pluck('name')
-            ];
-            return $this->success('Token refrescado exitosamente', 200, $usuario);
+        // Si no se pudo refrescar
+        if (!$token) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No se pudo refrescar el token'
+            ], 401);
+        }
+
+        // Obtener el usuario autenticado
+        $user = auth('api')->user();
+
+        // Retornar la respuesta con el nuevo token
+        return $this->success('User',200, [
+            'status' => true,
+            'user' => $user,
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60 // tiempo en segundos
+        ]);
+       
+           
         } catch (\Throwable $th) {
-            $this->error('Error al refrescar el token');
-          
+            $this->error('Error');
         }
     }
 

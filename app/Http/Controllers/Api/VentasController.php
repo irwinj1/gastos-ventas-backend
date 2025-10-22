@@ -25,6 +25,7 @@ class VentasController extends Controller
     public function index(Request $request)
     {
         try {
+           
             //code...
             $ventasQuery = Venta::with(['entidades']);
 

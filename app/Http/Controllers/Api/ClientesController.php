@@ -19,16 +19,24 @@ class ClientesController extends Controller
     public function index(Request $request)
     {
         try {
+            
             $clientes = Entidades::where('es_cliente',true);
-            if($request->filled("nombreComercial")) {
-                $clientes = $clientes->where("nombre_comercial","ilike", $request->nombre_comercial);
+            if ($request->filled("buscar")) {
+                $buscar = '%' . $request->buscar . '%'; // para coincidencia parcial
+                
+                $clientes = $clientes->where(function($query) use ($buscar) {
+                    $query->where("nombre_comercial", "ilike", $buscar)
+                        ->orWhere("dui", "ilike", $buscar)
+                        ->orWhere("nit", "ilike", $buscar)
+                        ->orWhere("n_registro", "ilike", $buscar)
+                        ->orWhere("telefono", "ilike", $buscar)
+                        ->orWhere("email", "ilike", $buscar)
+                        ->orWhere("direccion", "ilike", $buscar)
+                        ->orWhere("nombre", "ilike", $buscar)
+                        ->orWhere("apellido", "ilike", $buscar);
+                });
             }
-            if($request->filled("esCliente")) {
-                $clientes = $clientes->where("es_cliente",$request->esCliente);
-            }
-            if($request->filled("esProveedor")) {
-                $clientes = $clientes->where("es_proveddor",$request->esProveddor);
-            }
+            
             $clientesData = $clientes->paginate(10);
             $pagination = [
                 "perPage"=> $clientesData->perPage(),
@@ -38,6 +46,7 @@ class ClientesController extends Controller
             ];
             $dataFormatted = $clientesData->map(function ($clientes) {
                 return [
+                    "id"=> $clientes->id,
                     "nombre"=>$clientes->nombre,
                     "apellido"=> $clientes->apellido,
                     "direccion"=> $clientes->direccion,
