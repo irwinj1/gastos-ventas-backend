@@ -122,7 +122,7 @@ class ClientesController extends Controller
     /**
 
      *
-     * @operationId cliente
+     * @operationId Obtener cliente
      */
     public function getClienteId(Request $request, $id = null)
     {
@@ -151,6 +151,20 @@ class ClientesController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             $this->error($th->getMessage());
+        }
+    }
+
+    /**
+
+     *
+     * @operationId Actualizar cliente
+     */
+
+    public function actualizarCliente(Request $request){
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
     

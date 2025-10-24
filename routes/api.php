@@ -45,5 +45,6 @@ Route::middleware('auth:api')->prefix('admin')->group(function () {
         Route::post('/create',[ClientesController::class,'createCliente'])->middleware('rolePermission:Super Admin,Admin');
         Route::get('/obtener/{id?}', [ClientesController::class, 'getClienteId'])->middleware('rolePermission:Super Admin,Admin');
         Route::delete('/eliminar/{id}', [ClientesController::class,'eliminarCliente'])->middleware('rolePermission:Super Admin,Admin');
+        Route::put('/actualizar/{id}',[ClientesController::class,'actualizarCliente'])->middleware('rolePermission:Super Admin.Admin');
     });
 });
