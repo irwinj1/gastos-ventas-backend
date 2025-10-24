@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Clientes\ClienteCreateRequest;
 use App\Models\Entidades;
 use App\Traits\ApiResponse;
+use DB;
 use Illuminate\Http\Request;
 
 class ClientesController extends Controller
@@ -150,6 +151,26 @@ class ClientesController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             $this->error($th->getMessage());
+        }
+    }
+    
+    /**
+
+     *
+     * @operationId Eliminar cliente
+     */
+
+    public function eliminarCliente(Request $request, $id = null){
+        try {
+            DB::beginTransaction();
+            $cliente = Entidades::find($id);
+
+            $cliente->delete();
+            
+            DB::commit();
+            return $this->success("Cliente eliminado",200, $cliente);
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 }
