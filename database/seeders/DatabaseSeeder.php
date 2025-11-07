@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             TipoArchivoSeeder::class,
+            PaisSeeder::class,
+            DepartamentosSeeder::class,
+            MunicipiosSeeder::class,
+            DistritosSeeder::class
          
         ]);
     }

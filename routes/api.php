@@ -1,5 +1,7 @@
 <?php
+use App\Http\Controllers\Api\CatalogosController;
 use App\Http\Controllers\Api\ClientesController;
+use App\Http\Controllers\Api\ProveedorController;
 use App\Http\Controllers\Api\VentasController;
 use App\Http\Controllers\auth\AuthenticationController;
 use App\Http\Controllers\auth\RolPermissionController;
@@ -45,6 +47,17 @@ Route::middleware('auth:api')->prefix('admin')->group(function () {
         Route::post('/create',[ClientesController::class,'createCliente'])->middleware('rolePermission:Super Admin,Admin');
         Route::get('/obtener/{id?}', [ClientesController::class, 'getClienteId'])->middleware('rolePermission:Super Admin,Admin');
         Route::delete('/eliminar/{id}', [ClientesController::class,'eliminarCliente'])->middleware('rolePermission:Super Admin,Admin');
-        Route::put('/actualizar/{id}',[ClientesController::class,'actualizarCliente'])->middleware('rolePermission:Super Admin.Admin');
+        Route::put('/actualizar/{id}',[ClientesController::class,'actualizarCliente'])->middleware('rolePermission:Super Admin,Admin');
     });
+
+    Route::prefix('proveedores')->group(function(){
+        Route::get('/',[ProveedorController::class,'index'])->middleware('rolePermission:Super Admin,Admin');
+    });
+});
+
+Route::prefix('catalogo')->group(function(){
+    Route::get('/paises',[CatalogosController::class, 'pais']);
+    Route::get('/departamentos/{id}',[CatalogosController::class,'departamentos']);
+    Route::get('/municipios/{id}',[CatalogosController::class,'municipios']);
+    Route::get('/distritos/{id}',[CatalogosController::class,'distritos']);
 });

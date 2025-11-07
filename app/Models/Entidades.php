@@ -17,6 +17,7 @@ class Entidades extends Model
         'email',
         'telefono',
         'direccion',
+        'id_distrito',
         'es_cliente',
         'es_proveedor',
     ];
@@ -25,5 +26,9 @@ class Entidades extends Model
     }
     public function ventas(){
         return $this->hasMany(Venta::class,'id_entidad','id');
+    }
+
+    public function distritos(){
+        return $this->belongsTo(Distrito::class,'id_distrito','id');
     }
 }

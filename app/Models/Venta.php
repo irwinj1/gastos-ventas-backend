@@ -14,12 +14,16 @@ class Venta extends Model
 
 
 
-    public function detalle_ventas(){
+    public function detalleVentas(){
         return $this->hasMany( DetalleVenta::class,"id_venta","id");
     }
 
    
     public function entidades(){
         return $this->belongsTo(Entidades::class,"id_entidad","id");
+    }
+
+    public function archivos(){
+        return $this->belongsTo(Archivo::class,'id_referencia','id');
     }
 }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('telefono')->nullable();
             $table->string('direccion')->nullable();
             $table->string('n_registro')->nullable();
+            $table->foreignId('id_distrito')->constrained('distritos')->onDelete('cascade');
 
             // Roles
             $table->boolean('es_cliente')->default(false);

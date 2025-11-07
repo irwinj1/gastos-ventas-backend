@@ -29,8 +29,8 @@ class CrearVentaRequest extends FormRequest
             "detalleVentas.*.cantidad" => "required|integer|min:1",
             "detalleVentas.*.precioUnitario" => "required|numeric|min:0",
             "detalleVentas.*.total" => "required|numeric|min:0",
-            'imagenes' => ['nullable', 'array'],
-            'imagenes.*' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'imagenes' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
+           
             
 
         ];
@@ -52,10 +52,10 @@ class CrearVentaRequest extends FormRequest
             "detalleVentas.*.total.required" => "El total es obligatorio",
             "detalleVentas.*.total.numeric" => "El total debe ser un número",
 
-            'imagenes.array' => 'Las imágenes deben enviarse en formato de arreglo.',
-            'imagenes.*.file' => 'Cada imagen debe ser un archivo válido',
-            'imagenes.*.mimes' => 'Solo se permiten imágenes JPG o PNG',
-            'imagenes.*.max' => 'Cada imagen no debe superar los 2 MB',
+            
+            'imagenes.file' => 'Cada imagen debe ser un archivo válido',
+            'imagenes.mimes' => 'Solo se permiten imágenes JPG o PNG',
+            'imagenes.max' => 'Cada imagen no debe superar los 2 MB',
             
         ];
     }

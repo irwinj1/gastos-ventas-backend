@@ -27,6 +27,7 @@ class VentasController extends Controller
         try {
            
             //code...
+           // return $request->all();
             $ventasQuery = Venta::with(['entidades']);
 
             if ($request->filled('busqueda')) {
@@ -101,22 +102,22 @@ class VentasController extends Controller
 
                 // Verificar si existe imagen para este detalle
                 // Verificar si existe imagen para este detalle usando el mismo índice
-                if (isset($images[$key]) && $images[$key]->isValid()) {
-                    $originalName = $images[$key]->getClientOriginalName();
-                    $extension = $images[$key]->getClientOriginalExtension();
-                    $tamanio = $images[$key]->getSize();
-                    $path = $images[$key]->store('detalleVentas', 'public');
-                    Archivo::create([
-                        'id_tipo_archivo'=>1,
-                        'id_referencia'=> $detalleVenta['id'],
-                        'nombre_archivo'=> $originalName,
-                        'ruta'=> $path,
-                        'extension'=> $extension,
-                        'tamanio'=> $tamanio,
-                    ]);
-                }
+                
             }
-
+            if($request->hasFile('image')){
+                $originalName = $request->file('image')->getClientOriginalName();
+                $extension = $request->file('image')->getClientOriginalExtension();
+                $tamanio = $request->file('image')->getSize();
+                $path = $request->file('image')->store('ventas', 'public');
+                Archivo::create([
+                    'id_tipo_archivo'=>1,
+                    'id_referencia'=> $ventas->id,
+                    'nombre_archivo'=> $originalName,
+                    'ruta'=> $path,
+                    'extension'=> $extension,
+                    'tamanio'=> $tamanio,
+                ]);
+            }
             $ventas->total = $total;
             $ventas->save();
 
@@ -159,4 +160,17 @@ class VentasController extends Controller
         }
     }
 
+    /**
+
+     *
+     * @operationId exportar ventas
+     */
+
+    public function exportarPDF(Request $request){
+        try {
+            $ventas = Venta::with(['detalleVentas'])->whereIn('id',$request->ids)->get();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }
