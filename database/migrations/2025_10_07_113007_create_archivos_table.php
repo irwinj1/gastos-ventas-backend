@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('archivos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_tipo_archivo')->constrained('tipo_archivos')->cascadeOnDelete();
-            $table->unsignedBigInteger('id_referencia');
             $table->string('nombre_archivo', 200);
             $table->string('ruta', 300);
             $table->string('extension', 10)->nullable();

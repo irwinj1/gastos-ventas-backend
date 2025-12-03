@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('users')->cascadeOnDelete();
             $table->foreignId('id_entidad')->constrained('entidades')->cascadeOnDelete();
             $table->decimal('total',10,2)->nullable();
+            $table->foreignId('id_referencia')->nullable()->constrained('archivos')->cascadeOnDelete();
             $table->timestamp('fecha_factura');
             $table->timestamps();
         });

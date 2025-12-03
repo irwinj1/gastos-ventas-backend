@@ -25,7 +25,7 @@ class VentasController extends Controller
     public function index(Request $request)
     {
         try {
-           
+
             //code...
            // return $request->all();
             $ventasQuery = Venta::with(['entidades']);
@@ -63,6 +63,80 @@ class VentasController extends Controller
         }
     }
 
+
+    /**
+
+     *
+     * @operationId Obtener venta
+     */
+    public function getVentaById($id){
+        try {
+            //code...
+
+            $venta = Venta::with(['detalleVentas','entidades.distritos.municipios.departamentos.pais','archivos'])->where('id',$id)->first();
+
+            $ventaFormated = [
+                'detalleVenta'=>$venta->detalleVentas->map(function($q){
+                    return [
+                        'id'=>$q->id,
+                        'id_venta'=>$q->id_venta,
+                        'descripcion'=>$q->descripcion,
+                        'cantidad'=>$q->cantidad,
+                        'precioUnitario'=>$q->precio_unitario,
+                        'ventasAfectadas'=>$q->ventas_afectadas,
+                        'createdAt'=>$q->created_at
+                    ];
+                }),
+                'cliente'=>[
+                    'id'=>$venta->entidades->id,
+                    'nombre'=>$venta->entidades->nombre,
+                    'apellido'=>$venta->entidades->apellido,
+                    'nombreComercial'=>$venta->entidades->nombre_comercial,
+                    'email'=>$venta->entidades->email,
+                    'dui'=>$venta->entidades->dui,
+                    'nit'=>$venta->entidades->nit,
+                    'telefono'=>$venta->entidades->telefono,
+                    'direccion'=>$venta->entidades->direccion,
+                    'esCliente'=>$venta->entidades->es_cliente,
+                    'esProveedor'=>$venta->entidades->es_proveedor,
+                    'registro'=>$venta->entidades->n_registro,
+                    'distrito'=>[
+                        'id'=>$venta->entidades->distritos->id,
+                        'nombre'=>$venta->entidades->distritos->nombre,
+                    ],
+                    'municipio'=>[
+                        'id'=>$venta->entidades->distritos->municipios->id,
+                        'nombre'=>$venta->entidades->distritos->municipios->nombre,
+                    ],
+                    'departamento'=>[
+                        'id'=>$venta->entidades->distritos->municipios->departamentos->id,
+                        'nombre'=>$venta->entidades->distritos->municipios->departamentos->nombre,
+                    ],
+                    'paises'=>[
+                        'id'=>$venta->entidades->distritos->municipios->departamentos->pais->id,
+                        'nombre'=>$venta->entidades->distritos->municipios->departamentos->pais->nombre,
+                        'siglas'=>$venta->entidades->distritos->municipios->departamentos->pais->siglas,
+                        'codigoArea'=>$venta->entidades->distritos->municipios->departamentos->pais->codigo_area,
+                        'mask'=>$venta->entidades->distritos->municipios->departamentos->pais->mask,
+                    ],
+                ],
+                'archivos'=>[
+                    'id'=>$venta->archivos->id,
+                    'nombrearchivo'=>$venta->archivos->nombre_archivo,
+                    'ruta'=>$venta->archivos->ruta,
+                    'extension'=>$venta->archivos->extension,
+                    'tamanio'=>$venta->archivos->tamanio,
+                    'img'=>base64_encode(file_get_contents(storage_path('app/public/'.$venta->archivos->ruta)))
+                ],
+                'fechaFactura'=>$venta->fecha_factura,
+                'total'=>$venta->total
+            ];
+            return $this->success('Detalle venta',200,$ventaFormated);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
     /**
 
      *
@@ -77,17 +151,20 @@ class VentasController extends Controller
         DB::beginTransaction();
 
         try {
+
             $objVentas = [
                 "id_user" => $idUser,
                 "id_entidad" => (int) $validated["clienteId"],
+                "fecha_factura" => $validated['fechaFactura']
             ];
             //    return $objVentas;
             $ventas = Venta::create($objVentas);
 
             $total = 0;
 
-           $images = $request->file('imagenes');
-        
+
+
+
             $paths = [];
             foreach ($validated['detalleVentas'] as $key => $detalle) {
                 $total += $detalle['total'];
@@ -102,16 +179,16 @@ class VentasController extends Controller
 
                 // Verificar si existe imagen para este detalle
                 // Verificar si existe imagen para este detalle usando el mismo índice
-                
+
             }
-            if($request->hasFile('image')){
-                $originalName = $request->file('image')->getClientOriginalName();
-                $extension = $request->file('image')->getClientOriginalExtension();
-                $tamanio = $request->file('image')->getSize();
-                $path = $request->file('image')->store('ventas', 'public');
-                Archivo::create([
+            if($request->hasFile('imagenes')){
+
+                $originalName = $request->file('imagenes')->getClientOriginalName();
+                $extension = $request->file('imagenes')->getClientOriginalExtension();
+                $tamanio = $request->file('imagenes')->getSize();
+                $path = $request->file('imagenes')->store('ventas', 'public');
+                $archivo = Archivo::create([
                     'id_tipo_archivo'=>1,
-                    'id_referencia'=> $ventas->id,
                     'nombre_archivo'=> $originalName,
                     'ruta'=> $path,
                     'extension'=> $extension,
@@ -119,6 +196,7 @@ class VentasController extends Controller
                 ]);
             }
             $ventas->total = $total;
+            $ventas->id_referencia = $archivo->id;
             $ventas->save();
 
             DB::commit();
@@ -135,6 +213,15 @@ class VentasController extends Controller
                 'message' => $th->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+
+     *
+     * @operationId actualizar venta
+     */
+    public function actualizarVenta(Request $request,$id){
+
     }
 
     /**

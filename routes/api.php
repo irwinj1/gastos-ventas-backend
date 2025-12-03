@@ -40,6 +40,7 @@ Route::middleware('auth:api')->prefix('admin')->group(function () {
         Route::get('/',[VentasController::class,'index'])->middleware('rolePermission:Super Admin,Admin');
         Route::post('/create',[VentasController::class,'createVentas'])->middleware('rolePermission:Super Admin,Admin');
         Route::delete('/delete/{id}',[VentasController::class,'destroy'])->middleware('rolePermission:Super Admin,Admin');
+        Route::get('/show/{id}',[VentasController::class,'getVentaById'])->middleware('rolePermission:Super Admin,Admin');
     });
 
     Route::prefix('clientes')->group(function () {

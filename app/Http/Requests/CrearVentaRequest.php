@@ -30,9 +30,7 @@ class CrearVentaRequest extends FormRequest
             "detalleVentas.*.precioUnitario" => "required|numeric|min:0",
             "detalleVentas.*.total" => "required|numeric|min:0",
             'imagenes' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-           
-            
-
+            "fechaFactura" => 'required'
         ];
     }
     public function messages(): array
@@ -56,6 +54,8 @@ class CrearVentaRequest extends FormRequest
             'imagenes.file' => 'Cada imagen debe ser un archivo válido',
             'imagenes.mimes' => 'Solo se permiten imágenes JPG o PNG',
             'imagenes.max' => 'Cada imagen no debe superar los 2 MB',
+
+            'fechaFatura.required' => 'La fecha de facturacion es requerida'
             
         ];
     }
